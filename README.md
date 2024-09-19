@@ -4,6 +4,8 @@ A helper library that shortens the classes and actions in the Discordjs library.
 
 | Class | Corresponding |
 | ------- | ------- |
+| **Configuration** | Commands file,Prefix Commands File, Events file and isChatInputCommand() - (type: function) | 
+| **Tools** | **ItentsAll**-> Receives all intents | 
 | **TextSelectBox** | StringSelectMenuBuilder, StringSelectMenuOptionBuilder | 
 | **UserSelectBox** | UserSelectMenuBuilder | 
 | **Button** | ButtonBuilder, ButtonStyle |
@@ -11,21 +13,43 @@ A helper library that shortens the classes and actions in the Discordjs library.
 | **Modal** | ModalBuilder, TextInputBuilder, TextInputStyle  | 
 | **ModalAction** | interactionCreate and isModalSubmit Action | 
 | **MessageSender** | EmbedBuilder | 
-| **Tools** | **ItentsAll**-> Receives all intents | 
-| **Configuration** | Commands file,Prefix Commands File, Events file and isChatInputCommand() - (type: function) | 
 | **ActionRow** | ActionRowBuilder() and addComponents() -  (type: function)  | 
 | **Command** | SlashCommandBuilder | 
 | **Event** | Event action | 
 | **Affix** | Prefix Command | 
 | **EmojiReact** | messageReaction Event | 
+| **Crumbs** | Helper functions | 
 
 ### Set up:
-```js
-// common
-const { Modal, Button } = require('discordjs-helper-pack')
+` npm i discordjs-helper-pack `
 
-// module
-import { Modal, Button } from 'discordjs-helper-pack'
+### Configuration Example:
+```js
+const { Configuration } = require('discordjs-helper-pack') 
+
+Configuration({
+	// incessary information
+	client: client,
+	dirname: __dirname,
+
+	commandsFileName: 'commands', // commands file
+	eventsFileName: 'events', // events file
+	chatInputCommand: true, // command interaction
+	
+	//prefix configurations
+    prefix: 'm!',
+    prefixCommandsFileName: 'prefixCommands'
+})
+```
+
+### Tools Examples:
+```js
+const { Tools } = require('discordjs-helper-pack') 
+const { ItentsAll } = new Tools()
+
+new Client({
+	intents: ItentsAll()
+})
 ```
 
 ### TextSelectBox Example:
@@ -60,18 +84,22 @@ const select = new UserSelectBox(customId, placeholder, max, min, disabled,setUs
 ```js
 const { Button } = require('discordjs-helper-pack')
 
-default value: customId, label
-new Button('btn1', 'Button One')
-new Button(customId, label, emoji, disabled)
+const button = new Button()
 
-// style
-new Button('btn1', 'Button One').danger()
+default value: customId, label, buttonStyle
+btn.add()
 
-.danger()
-.secondary()
-.primary()
-.success()
-.link()
+// example
+btn.add("example", "this is a example", btn.style.Secondary)
+
+// and others values
+emoji, disabled
+btn.add("example", "this is a example", btn.style.Secondary, "emoji", true)
+
+const btns = btn.build()
+
+// use example
+i.reply({components: [btns]})
 ```
 
 ### ButtonAction Example:
@@ -129,35 +157,6 @@ modalAction.on(async(interaction)=>{
 	}
 })
 
-```
-
-### Configuration Example:
-```js
-const { Configuration } = require('discordjs-helper-pack') 
-
-Configuration({
-	// incessary information
-	client: client,
-	dirname: __dirname,
-
-	commandsFileName: 'commands', // commands file
-	eventsFileName: 'events', // events file
-	chatInputCommand: true, // command interaction
-	
-	//prefix configurations
-    prefix: 'm!',
-    prefixCommandsFileName: 'prefixCommands'
-})
-```
-
-### Tools Examples:
-```js
-const { Tools } = require('discordjs-helper-pack') 
-const { ItentsAll } = new Tools()
-
-new Client({
-	intents: ItentsAll()
-})
 ```
 
 ### ActionRow Examples:
@@ -221,4 +220,14 @@ new EmojiReact(content or embed, channelId, client)
 // example
 new EmojiReact(content or embed, channelId, client)
 .build('🦁', async(reaction, user)=>{}, async(reaction, user)=>{}, async(reaction, user)=>{})
+```
+
+### Crumbs Example:
+```js
+const { Crumbs } = require('discordjs-helper-pack')
+
+
+const crumbs = new Crumbs()
+
+crumbs.randomColor() // random color function
 ```
